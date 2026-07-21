@@ -23,7 +23,7 @@ jobs:
             defconfig: "gki_defconfig"
             vendor_fragment: "vendor/lahaina_QGKI.config"
             device_codename: "riven"
-            ksu: true
+            ksu: false
             kpm: false
           - repo: "https://github.com/realme-kernel-opensource/realme_gt2-realme_gt-AndroidU-kernel-source.git"
             modules_repo: "https://github.com/realme-kernel-opensource/realme_gt2_realme_gt-AndroidU-vendor-source.git"
@@ -37,7 +37,7 @@ jobs:
             defconfig: "gki_defconfig"
             vendor_fragment: "vendor/lahaina_QGKI.config"
             device_codename: "porsche"
-            ksu: true
+            ksu: false
             kpm: false
       fail-fast: false
     env:
