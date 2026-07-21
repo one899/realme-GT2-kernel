@@ -76,7 +76,7 @@ jobs:
           git clone "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9.git" -b "android12L-release" gcc-64 --depth=1
           git clone "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9.git" -b "android12L-release" gcc-32 --depth=1
 
-          git clone "https://github.com/TheBizarreAbhishek/clang-r450784d.git" -b "master" "clang-custom" --depth 1
+          git clone "https://github.com/prorooter007/android_prebuilts_clang_host_linux-x86_clang-6877366.git" -b "11.0" "clang-custom" --depth 1
 
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
@@ -129,6 +129,9 @@ jobs:
           cd $GITHUB_WORKSPACE/kernel/msm-5.4
 
           export PATH=$GITHUB_WORKSPACE/clang-custom/bin:$PATH
+
+          # 修复源码非 ASCII 字符（U+00A6 -> |）
+          sed -i 's/\xc2\xa6/|/g' include/linux/memcontrol.h
 
           # 1. 生成 defconfig
           make CC="ccache clang" O=out ARCH=arm64 CLANG_TRIPLE=aarch64-linux-gnu- BRAND_SHOW_FLAG=realme ${{ matrix.command }} CROSS_COMPILE=$GITHUB_WORKSPACE/gcc-64/bin/aarch64-linux-android- CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/gcc-32/bin/arm-linux-androideabi- ${{ matrix.defconfig }}
