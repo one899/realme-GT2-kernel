@@ -1,4 +1,4 @@
-name:SM8350 - realme GT/GT2 AndroidU
+name: bzdsbzda
 
 on:
   workflow_call:
@@ -76,7 +76,7 @@ jobs:
           git clone "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9.git" -b "android12L-release" gcc-64 --depth=1
           git clone "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9.git" -b "android12L-release" gcc-32 --depth=1
 
-          git clone "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/clang-r450784d" -b "master" "clang-custom" --depth 1
+          git clone "https://github.com/TheBizarreAbhishek/clang-r450784d.git" -b "main" "clang-custom" --depth 1
 
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
