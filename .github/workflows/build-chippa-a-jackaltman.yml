@@ -130,8 +130,9 @@ jobs:
 
           export PATH=$GITHUB_WORKSPACE/clang-custom/bin:$PATH
 
-          # 修复源码非 ASCII 字符（U+00A6 -> |）
-          sed -i 's/\xc2\xa6/|/g' include/linux/memcontrol.h
+          # 修复源码非 ASCII 字符 + 返回类型 bug（CONFIG_MEMCG 未启用时的 #else 块）
+          sed -i 's/\xc2\xa6//g' include/linux/memcontrol.h
+          sed -i 's/return ((struct chp_lruvec \*)pgdat->deferred_split_queue.split_queue_len)->lruvec;/return \&((struct chp_lruvec *)pgdat->deferred_split_queue.split_queue_len)->lruvec;/g' include/linux/memcontrol.h
 
           # 1. 生成 defconfig
           make CC="ccache clang" O=out ARCH=arm64 CLANG_TRIPLE=aarch64-linux-gnu- BRAND_SHOW_FLAG=realme ${{ matrix.command }} CROSS_COMPILE=$GITHUB_WORKSPACE/gcc-64/bin/aarch64-linux-android- CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/gcc-32/bin/arm-linux-androideabi- ${{ matrix.defconfig }}
@@ -139,8 +140,9 @@ jobs:
           # 2. 合并 vendor QGKI fragment（NonGKI 方式）
           ./scripts/kconfig/merge_config.sh -m -O out arch/arm64/configs/${{ matrix.vendor_fragment }}
 
-          # 3. 追加 BPF CONFIG（KSU 已在 defconfig 追加）
+          # 3. 追加 BPF + MEMCG CONFIG（KSU 已在 defconfig 追加）
           cat >> out/.config <<EOF
+          CONFIG_MEMCG=y
           CONFIG_BPF=y
           CONFIG_BPF_SYSCALL=y
           CONFIG_BPF_JIT=y
